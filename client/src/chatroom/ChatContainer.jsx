@@ -4,6 +4,7 @@ import UserLogin from "./UserLogin";
 import ChatBoxReciever from "./ChatBoxReciever";
 import ChatBoxSender from "./ChatBoxSender";
 import InputText from "./InputText";
+import moment from 'moment';
 
 
 export default function ChatContainer() {
@@ -33,6 +34,7 @@ export default function ChatContainer() {
 //          setChats to that recieved chats
     useEffect(() => {
         setSocketIO(socketIoClient('http://localhost:4000'))
+        //todo fetch to the backend here
     }, [])
 
     useEffect(() => {
@@ -40,9 +42,31 @@ export default function ChatContainer() {
         socketio.on('recieve-chat', (recievedChats) => {
             addChat(recievedChats.chat);
         });
+        socketio.on('room-joined', (chatsOfRoom) => {
+            setChats((chats) => {
+                const incomingChats = chatsOfRoom.roomChats.sort(sortByTime)
+                const current = chats[chatsOfRoom.room] !== undefined ? chats[chatsOfRoom.room].slice(0) : [];
+                const updatedChats = {...chats, [chats[chatsOfRoom.room]]: [...current, incomingChats]}
+                localStorage.setItem('chats', JSON.stringify(updatedChats));
+                return updatedChats;
+            })
+        })
     }
     }, [socketio]);
 
+    function sortByTime(a, b) {
+        const timeA = moment(a.time, 'MMMM do YYYY, h:mm a');
+        const timeB = moment(b.time, 'MMMM do YYYY, h:mm a');
+
+        if (timeA.isBefore(timeB)) {
+            return -1;
+        } else if (timeB.isBefore(timeA)) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+ 
     function addChat (chat) {
         setChats((chats)=>{
             const current = chats[chat.currentRoom].slice(0);
@@ -74,7 +98,8 @@ export default function ChatContainer() {
 //  EFFECTS: updates your list of chats and then send your new chat with your username
 //          and avatar to the other clients
     function addMessage(chat) {
-        const newChat = {...chat, user, avatar, currentRoom};
+        const timeOfMessage = moment().format('MMMM do YYYY, h:mm a');
+        const newChat = {...chat, user, avatar, currentRoom, timeOfMessage};
         sendChatsToBackend(newChat);
     }
 

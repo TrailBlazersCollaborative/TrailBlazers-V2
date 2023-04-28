@@ -9,6 +9,7 @@ const bikeTrailsRouter = require('./routers/bikeTrailsAPI');
 const bikeTrailInfoRouter = require('./routers/bikeTrailInfoAPI');
 const sessionRouter = require('./routers/sessionRouter')
 const dbRouter = require('./routers/dbAPI');
+const db = require('../server/models/bikeTrailsModels')
 
 // Socket.io implement start
 
@@ -25,13 +26,36 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log('connection successfully');
   socket.on('join-room', room => {
-    socket.join(room);
+    socket.join(room, async() => {
+      try {
+        const queryString = 'SELECT * FROM messages where room = $1'
+        const values = [room];
+        let roomChats;
+        
+        await db.query(queryString, values)
+                .then((data) => {
+                  roomChats = data.rows;
+                })
+
+        socket.emit('room-joined', {roomChats, room});
+      } catch(err) {
+        console.log(err);
+      }
+    });
   })
 
-  socket.on('send-chat', (data, cb) => {
-    console.log(data);
-    socket.to(data.currentRoom).emit('recieve-chat', data);
-    cb();
+  socket.on('send-chat', async (data, cb) => {
+    try {
+      const {chat, user, avatar, currentRoom, timeOfMessage} = data.chat;
+      const queryString = 'INSERT INTO messages (usernames, avatar_image, message, room, date) VALUES ($1, $2, $3, $4, $5);';
+      const values = [chat, user, avatar, currentRoom, timeOfMessage];
+      await db.query(queryString, values);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      socket.to(data.currentRoom).emit('recieve-chat', data);
+      cb();
+    }
 })
 
   socket.on('disconnect', () => {
