@@ -16,6 +16,9 @@ import axios from "axios";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
 import Brightness7Icon from "@mui/icons-material/Brightness7";
 import Stack from "@mui/material/Stack";
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
+
 
 export default function ButtonAppBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -138,14 +141,23 @@ export default function ButtonAppBar(props) {
                 Logout
               </Button>
             ) : (
-              <Button
-                color="inherit"
-                component="a"
-                href="http://localhost:4000/auth/google"
-                sx={{ fontWeight: "bold", }}
-              >
-                Login
-              </Button>
+              // <Button
+              //   color="inherit"
+              //   component="a"
+              //   href="http://localhost:4000/auth/google"
+              //   sx={{ fontWeight: "bold", }}
+              // >
+              //   Login
+              // </Button>
+              <GoogleOAuthProvider clientId="376042113743-qqvq0qnc4j0r7v4aq7hq9r2kqnj1jugj.apps.googleusercontent.com">
+                <GoogleLogin
+                  onSuccess={(res) => {
+                    console.log(res)
+                    window.location.href="http://localhost:4000/auth/google"
+                  }}
+                  onFailure={(res)=>console.log(res)}
+                />
+              </GoogleOAuthProvider>
           )}
           </Stack>
           </Toolbar> 

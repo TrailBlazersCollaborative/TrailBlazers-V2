@@ -16,6 +16,7 @@ import Typography from "@mui/material/Typography";
 import axios from "axios";
 import Slider from "@mui/material/Slider";
 import ChatContainer from "./chatroom/ChatContainer";
+import assetExports from './assets/assetExports'
 
 const App = () => {
   const [zip, updateZip] = useState("");
@@ -178,11 +179,11 @@ const App = () => {
                   <div className="landing-container">
                     <div className="img-wrapper">
                       <img
-                        src="src/assets/homepage-1.jpeg"
+                        src={assetExports.homepage1}
                         className="welcome-img"
                       ></img>
                       <img
-                        src="src/assets/homepage-2.jpeg"
+                        src={assetExports.homepage2}
                         className="welcome-img"
                       ></img>
                     </div>

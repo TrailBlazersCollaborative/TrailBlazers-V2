@@ -5,11 +5,13 @@
   "main": "server.js",
   "scripts": {
     "start": "cd ./server && npm start",
+    "build": "cd ./client && npm run build",
     "dev": "concurrently \"cd ./server && npm run dev\" \"cd ./client && npm run dev\""
   },
   "author": "YouruiR",
   "license": "ISC",
   "dependencies": {
+    "@react-oauth/google": "^0.11.0",
     "aws-sdk": "^2.1364.0",
     "concurrently": "^8.0.1",
     "cookie": "^0.5.0",

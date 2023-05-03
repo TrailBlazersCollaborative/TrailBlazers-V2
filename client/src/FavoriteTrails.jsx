@@ -12,6 +12,7 @@ import Typography from "@mui/material/Typography";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useNavigate } from "react-router-dom";
+import assetExports from './assets/assetExports'
 
 const style = {
   position: "absolute",
@@ -111,7 +112,7 @@ export default function FavoriteTrails() {
             <ImageListItem key={index}>
               <img
                 className="faveImg"
-                src={`src/assets/mtn-biking-${index}.jpeg`}
+                src={assetExports.mtnBikingPics[index]}
                 loading="lazy"
                 onClick={()=>navigate(`/details/${item.trailId}/${index}`)}
               />

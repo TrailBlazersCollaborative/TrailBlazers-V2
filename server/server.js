@@ -9,6 +9,7 @@ const bikeTrailsRouter = require('./routers/bikeTrailsAPI');
 const bikeTrailInfoRouter = require('./routers/bikeTrailInfoAPI');
 const sessionRouter = require('./routers/sessionRouter')
 const dbRouter = require('./routers/dbAPI');
+const path = require('path');
 
 // Socket.io implement start
 
@@ -49,7 +50,7 @@ app.use(session({
   saveUninitialized: false,
   cookie: { secure: false, maxAge: 60000 * 60}, // expires in 1 day
 }));
-
+app.use(express.static(path.resolve(__dirname, '../client/dist')))
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -121,21 +122,6 @@ const corsOptions = {
 app.use(cors(corsOptions))
 app.use('/api/db', dbRouter);
 
-// NEEDED FOR UI MOCK - REMOVE LATER
-const fs = require('fs');
-const path = require('path');
-const mockTrailsFilePath = path.join(__dirname, 'mock/mockFavoriteTrails.json');
-
-// MOCK ENDPOINT FOR UI DEVELOPMENT - REMOVE LATER
-app.post('/saveFavoriteTrail', (req, res) => {
-  res.sendStatus(200);
-}); 
-// MOCK ENDPOINT FOR UI DEVELOPMENT - REMOVE LATER
-app.get('/getAllFavoriteTrails', (req, res) => {
-  const readable = fs.createReadStream(mockTrailsFilePath);
-  readable.pipe(res);
-});
-
 
 app.get('/auth/google',
   (req, res, next) => {console.log("this is being hit 1"); return next();}, 
@@ -148,7 +134,7 @@ app.get('/googlecallback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.status(200).redirect('http://localhost:5173');
+    res.status(200).redirect('/');
   }
 );
 
@@ -171,7 +157,7 @@ app.get('/socket.io', (req, res) => {
 
 app.use('*', (req, res) => {
   console.log("Redirecting to client app");
-  return res.redirect('http://localhost:5173');
+  return res.sendFile(path.join(__dirname, '../client/dist/index.html'))
 })
 
 app.use((err, req, res, next) => {

@@ -8,6 +8,7 @@ import { Paper } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { useTheme } from "@mui/material/styles";
+import assetExports from './assets/assetExports'
 
 export default function TrailDetails(props) {
   const [trail, updateTrail] = useState([{}]);
@@ -141,7 +142,7 @@ export default function TrailDetails(props) {
               </Snackbar>
               <img
                 className="banner-img"
-                src={`../../src/assets/mtn-banner-${params.idx}.jpeg`}
+                src={assetExports.mtnBannerPics[params.idx]}
               ></img>
             </div>
             <Typography

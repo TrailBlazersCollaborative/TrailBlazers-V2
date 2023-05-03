@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { useEffect } from 'react';
+import assetExports from './assets/assetExports'
 
 export default function TrailInfoCard({trail, index}) {
 
@@ -16,7 +17,7 @@ export default function TrailInfoCard({trail, index}) {
           component="img"
           height="200"
           width="200"
-          src={`src/assets/mtn-biking-${index}.jpeg`}
+          src={assetExports.mtnBikingPics[index]}
         />
         <CardContent sx={{ minHeight: 200 }}>
           <Typography gutterBottom variant="h6" noWrap component="div">
