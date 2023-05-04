@@ -141,14 +141,6 @@ export default function ButtonAppBar(props) {
                 Logout
               </Button>
             ) : (
-              // <Button
-              //   color="inherit"
-              //   component="a"
-              //   href="http://localhost:4000/auth/google"
-              //   sx={{ fontWeight: "bold", }}
-              // >
-              //   Login
-              // </Button>
               <GoogleOAuthProvider clientId="376042113743-qqvq0qnc4j0r7v4aq7hq9r2kqnj1jugj.apps.googleusercontent.com">
                 <GoogleLogin
                   onSuccess={(res) => {
