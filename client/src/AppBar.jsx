@@ -9,7 +9,6 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-import Switch from '@mui/material/Switch';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -135,17 +134,17 @@ export default function ButtonAppBar(props) {
               <Button
                 color="inherit"
                 component="a"
-                href="http://localhost:4000/logout"
+                href="/logout"
                 sx={{ fontWeight: "bold", }}
               >
                 Logout
               </Button>
             ) : (
-              <GoogleOAuthProvider clientId="376042113743-qqvq0qnc4j0r7v4aq7hq9r2kqnj1jugj.apps.googleusercontent.com">
+              <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLECLIENTID}>
                 <GoogleLogin
                   onSuccess={(res) => {
                     console.log(res)
-                    window.location.href="http://localhost:4000/auth/google"
+                    window.location.href="/auth/google"
                   }}
                   onFailure={(res)=>console.log(res)}
                 />

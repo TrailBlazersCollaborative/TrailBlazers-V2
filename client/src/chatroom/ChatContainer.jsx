@@ -55,7 +55,7 @@ export default function ChatContainer(props) {
   //          that is contained within that parcitular socket channel and then we
   //          setChats to that recieved chats
   useEffect(() => {
-    setSocketIO(socketIoClient("http://localhost:4000"));
+    setSocketIO(socketIoClient("https://trailblazers-app.azurewebsites.net/"));
   }, []);
 
   useEffect(() => {

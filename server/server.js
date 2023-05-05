@@ -15,6 +15,7 @@ const path = require('path');
 
 const Server = require('socket.io').Server; // Required for socket.io
 const server = http.createServer(app); // Creates an HTTP server using the express app for socket.io
+const port = process.env.PORT || 4000
 
 const io = new Server(server, {
   cors: {
@@ -58,7 +59,7 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
   clientID: process.env.VITE_GOOGLECLIENTID,
   clientSecret: process.env.VITE_GOOGLECLIENTSECRET,
-  callbackURL: "http://localhost:4000/googlecallback",
+  callbackURL: "/googlecallback",
   userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
 },
 async function(accessToken, refreshToken, profile, cb) {
@@ -117,7 +118,7 @@ app.use('/api/moreInfo', bikeTrailInfoRouter);
 app.use('/api/sessions', sessionRouter);
 const corsOptions = {
   credentials: true,
-  origin: 'http://localhost:5173'
+  origin: '/'
 };
 app.use(cors(corsOptions))
 app.use('/api/db', dbRouter);
@@ -134,7 +135,7 @@ app.get('/googlecallback',
   passport.authenticate('google', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
-    res.status(200).redirect('/');
+    res.status(200).redirect('https://trailblazers-app.azurewebsites.net');
   }
 );
 
@@ -146,14 +147,11 @@ app.get("/logout", (req, res) => {
     }
     req.logout(() => {
       res.clearCookie('connect.sid', { path: '/' });
-      res.redirect('http://localhost:5173');
+      res.redirect('/');
     });
   });
 });
 
-app.get('/socket.io', (req, res) => {
-  console.log("hi");
-})
 
 app.use('*', (req, res) => {
   console.log("Redirecting to client app");
@@ -172,4 +170,4 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-server.listen(4000, () => { console.log('server started on port 4000') });
+server.listen(port, () => { console.log(`server started on port ${port}`) });

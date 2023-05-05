@@ -1,0 +1,4 @@
+{
+  "appService.defaultWebAppToDeploy": "/subscriptions/a724fb5a-86ad-444b-9e75-1385b9f91a0d/resourceGroups/my-resource-group/providers/Microsoft.Web/sites/trailblazers-app",
+  "appService.deploySubpath": "."
+}
